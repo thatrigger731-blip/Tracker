@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manga Tracker</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a2e);
+  color: white;
+}
+
+/* Header */
+.header {
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  background: #111;
+  text-align: center;
+}
+
+/* Input area */
+.container {
+  padding: 15px;
+  text-align: center;
+}
+
+input {
+  width: 70%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+button {
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: none;
+  background: #ff4d6d;
+  color: white;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+/* Manga cards */
+.card {
+  background: rgba(255,255,255,0.05);
+  margin: 10px;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px);
+}
+
+.card button {
+  background: transparent;
+  border: 1px solid #ff4d6d;
+  color: #ff4d6d;
+  padding: 6px 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">📚 Manga Tracker</div>
+
+<div class="container">
+  <input id="mangaInput" placeholder="Add manga name">
+  <button onclick="addManga()">Add</button>
+</div>
+
+<div id="list"></div>
+
+<script>
+let mangaList = JSON.parse(localStorage.getItem("manga")) || [];
+
+function render() {
+  let list = document.getElementById("list");
+  list.innerHTML = "";
+
+  mangaList.forEach((m, i) => {
+    list.innerHTML += `
+      <div class="card">
+        <span>📖 ${m}</span>
+        <button onclick="removeManga(${i})">Delete</button>
+      </div>
+    `;
+  });
+}
+
+function addManga() {
+  let input = document.getElementById("mangaInput");
+  if (!input.value.trim()) return;
+
+  mangaList.push(input.value);
+  localStorage.setItem("manga", JSON.stringify(mangaList));
+  input.value = "";
+  render();
+}
+
+function removeManga(i) {
+  mangaList.splice(i, 1);
+  localStorage.setItem("manga", JSON.stringify(mangaList));
+  render();
+}
+
+render();
+</script>
+
+</body>
+</html>
